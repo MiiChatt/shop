@@ -3,6 +3,7 @@ import java.util.ArrayList;
 class Customer {
     private double money;
     private ArrayList<Manga> inventory;
+    private double bet;
 
     public Customer(double initialMoney) {
         this.money = initialMoney;
@@ -11,6 +12,18 @@ class Customer {
      public double getMoney() {
         return money;
      }
+         public void setBet(double bet) {
+        this.bet = bet;
+    }
+    public double getBet() {
+        return this.bet;
+    }
+    public void setMoney(double money) {
+        this.money = money;
+    }
+    public void addMoney(double amount) {
+        this.money += amount;
+    }
      public boolean buy(Manga manga) {
         if (money >= manga.getPrice()) {
             money -= manga.getPrice();
@@ -30,4 +43,4 @@ class Customer {
             }
         }
      }
-}
+    }
