@@ -7,64 +7,63 @@ public class ShopOfManga {
         kb.useLocale(Locale.US);
         Coin coin = new Coin();
 
-            System.out.println("\nYour current balance is: $" + customer.getMoney());
+        System.out.println("\nYour current balance is: $" + customer.getMoney());
 
-            System.out.println("How do you want to bet?");
-            System.out.println("1. Manual amount");
-            System.out.println("2. Percentage of balance");
-            System.out.println("0. Exit the game");
+        System.out.println("How do you want to bet?");
+        System.out.println("1. Manual amount");
+        System.out.println("2. Percentage of balance");
+        System.out.println("0. Exit the game");
+        System.out.print("Choose an option (1 or 2 or 0): ");
+        int betType = kb.nextInt();
+
+        while (betType != 1 && betType != 2 && betType != 0) {
+            System.out.println("Invalid option. Please choose 1 for Manual amount or 2 for Percentage of balance or 0 to exit.");
             System.out.print("Choose an option (1 or 2 or 0): ");
-            int  betType = kb.nextInt();
-
-            while (betType != 1 && betType != 2 && betType != 0) {
-                System.out.println("Invalid option. Please choose 1 for Manual amount or 2 for Percentage of balance or 0 to exit.");
-                System.out.print("Choose an option (1 or 2 or 0): ");
-                betType = kb.nextInt();
-            }
-            if (betType == 0) {
-                kb.nextLine(); // Consume the newline character
-                System.out.println("Returning to the shop...");
-                return;
-            }
-            double betAmount = 0;
-
-            if (betType == 1) {
-                System.out.print("Input your bet amount: ");
-                betAmount = kb.nextDouble();
-            } else {
-                System.out.print("Input the percentage of your balance to bet (1-100): ");
-                double percentage = kb.nextDouble();
-                betAmount = (percentage / 100) * customer.getMoney();
-            }
-
-            while (betAmount <= 0 || betAmount > customer.getMoney()) {
-                System.out.println("Invalid bet. You must input a bet larger than 0 and up to your balance.");
-                System.out.print("Input your bet again: ");
-                betAmount = kb.nextDouble();
-            }
-            customer.setBet(betAmount);
-
-            System.out.print("Choose (1 -> Heads, 2 -> Tails): ");
-            int choice = kb.nextInt();
-
-            String result = coin.flip();
-            System.out.println("The coin landed on: " + result);
-
-            String customerChoice = (choice == 1) ? "Heads" : "Tails";
-
-            if (customerChoice.equalsIgnoreCase(result)) {
-                System.out.println("Peak! you win $" + customer.getBet());
-                customer.setMoney(customer.getMoney() + customer.getBet());
-            }
-            else {
-                System.out.println("Twin... you lost xd $" + customer.getBet());
-                customer.setMoney(customer.getMoney() - customer.getBet());
-            }
-            if (customer.getMoney() == 0) {
-                System.out.println("\nYou are broke twin, lmao, it happens, your lose this time. Game over.");
-            }
-            kb.nextLine(); // Consume the newline character left by nextInt() or nextDouble()
+            betType = kb.nextInt();
         }
+        if (betType == 0) {
+            kb.nextLine();
+            System.out.println("Returning to the shop...");
+            return;
+        }
+
+        double betAmount = 0;
+        if (betType == 1) {
+            System.out.print("Input your bet amount: ");
+            betAmount = kb.nextDouble();
+        } else {
+            System.out.print("Input the percentage of your balance to bet (1-100): ");
+            double percentage = kb.nextDouble();
+            betAmount = (percentage / 100) * customer.getMoney();
+        }
+
+        while (betAmount <= 0 || betAmount > customer.getMoney()) {
+            System.out.println("Invalid bet. You must input a bet larger than 0 and up to your balance.");
+            System.out.print("Input your bet again: ");
+            betAmount = kb.nextDouble();
+        }
+        customer.setBet(betAmount);
+
+        System.out.print("Choose (1 -> Heads, 2 -> Tails): ");
+        int choice = kb.nextInt();
+        kb.nextLine();
+
+        String result = coin.flip();
+        System.out.println("The coin landed on: " + result);
+
+        String customerChoice = (choice == 1) ? "Heads" : "Tails";
+
+        if (customerChoice.equalsIgnoreCase(result)) {
+            System.out.println("Peak! you win $" + customer.getBet());
+            customer.setMoney(customer.getMoney() + customer.getBet());
+        } else {
+            System.out.println("Twin... you lost xd $" + customer.getBet());
+            customer.setMoney(customer.getMoney() - customer.getBet());
+        }
+        if (customer.getMoney() == 0) {
+            System.out.println("\nYou are broke twin, lmao, it happens, your lose this time. Game over.");
+        }
+    }
 
     public static void main(String[] args) {
         ArrayList<Manga> stock = new ArrayList<>();
@@ -82,45 +81,112 @@ public class ShopOfManga {
 
         Customer customer = new Customer(50);
         Scanner kb = new Scanner(System.in);
-        String input;
+        int choice;
 
         do {
-            System.out.println("\n--- MANGA SHOP --- (money: " + customer.getMoney() + "$)");
+            System.out.println("\n========================================");
+            System.out.println("           MANGA SHOP & CASINO          ");
+            System.out.println("========================================");
+            System.out.println("Current Money: " + customer.getMoney() + " EUR");
+            System.out.println("[1] Buy Mangas (Shop)");
+            System.out.println("[2] Sell Mangas (Second-Hand)");
+            System.out.println("[3] Games Zone (Casino)");
+            System.out.println("[0] Leave ");
+            System.out.print("Choose an option: ");
+            choice = kb.nextInt();
+            kb.nextLine();
 
-            if (stock.isEmpty()) {
-                System.out.println("Sold out! Nothing left to buy.");
-            }
-            for (Manga m : stock) {
-                System.out.println("- " + m);
-            }
+            switch (choice) {
+                case 1:
+                    while (true) {
+                        System.out.println("\n---MANGA SHOP--- (money: " + customer.getMoney() + " EUR)");
+                        if (stock.isEmpty()) {
+                            System.out.println("Sold out! Nothing left to buy.");
+                            break;
+                        }
 
-            System.out.print("Type the full title of the manga, 'gamble' to play the coin game, or 'exit' to leave: ");
-            input = kb.nextLine().trim();
+                        for (Manga m : stock) {
+                            System.out.println("- " + m);
+                        }
 
-            if (input.equalsIgnoreCase("gamble")) {
-                playCoinGame(customer, kb);
-            } else if (!input.equalsIgnoreCase("exit")) {
-                int index = -1;
-                for (int i = 0; i < stock.size(); i++) {
-                    if (stock.get(i).getTitle().equalsIgnoreCase(input)) {
-                        index = i;
+                        System.out.print("Type the full title of the manga you want (or 'back' to return): ");
+                        String buyInput = kb.nextLine().trim();
+
+                        if (buyInput.equalsIgnoreCase("back")) {
+                            break;
+                        }
+
+                        int buyIndex = -1;
+                        for (int i = 0; i < stock.size(); i++) {
+                            if (stock.get(i).getTitle().equalsIgnoreCase(buyInput)) {
+                                buyIndex = i;
+                                break;
+                            }
+                        }
+
+                        if (buyIndex == -1) {
+                            System.out.println("The manga is not in the shop.");
+                        } else if (customer.buy(stock.get(buyIndex))) {
+                            stock.remove(buyIndex);
+                            System.out.println("Purchase done!");
+                        } else {
+                            System.out.println("Not enough money!");
+                        }
+                    }
+                    break;
+
+                case 2:
+                    ArrayList<Manga> inv = customer.getInventory();
+                    if (inv.isEmpty()) {
+                        System.out.println("Your inventory is empty!");
                         break;
                     }
-                }
 
-                if (index == -1) {
-                    System.out.println("That manga is not in the shop.");
-                } else if (customer.buy(stock.get(index))) {
-                    stock.remove(index);
-                    System.out.println("Purchase done!");
-                } else {
-                    System.out.println("Not enough money.");
-                }
+                    System.out.println("---YOUR INVENTORY---");
+                    customer.showInventory();
+                    System.out.print("Write the title of the manga you want to sell (or 'back' to return): ");
+                    String sellInput = kb.nextLine().trim();
+
+                    if (sellInput.equalsIgnoreCase("back")) {
+                        break;
+                    }
+
+                    int sellIndex = -1;
+                    for (int i = 0; i < inv.size(); i++) {
+                        if (inv.get(i).getTitle().equalsIgnoreCase(sellInput)) {
+                            sellIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (sellIndex == -1) {
+                        System.out.println("You don't have that manga in your inventory.");
+                    } else {
+                        Manga mangaToSell = inv.get(sellIndex);
+                        double refund = Math.round(mangaToSell.getPrice() * 0.80 * 100) / 100.0;
+                        inv.remove(sellIndex);
+                        customer.addMoney(refund);
+                        stock.add(mangaToSell);
+
+                        System.out.println("Sell successful! You have received your refund!");
+                        System.out.println("you will recieve 80% of what you have spent since its now a second-hand manga.");
+                       }
+                       break;
+
+                case 3:
+                    playCoinGame(customer, kb);
+                    break;
+
+                case 0:
+                    System.out.println("\nThank for vistiting the manga shop and casino! We hope to see you soon!");
+                    customer.showInventory();
+                    break;
+
+                default:
+                    System.out.println("Invalid option, please choose an option between the numbers 0 and 3");
+                    break;
             }
-        } while (!input.equalsIgnoreCase("exit"));
-
-        System.out.println("\nYour inventory:");
-        customer.showInventory();
+        } while (choice != 0);
         kb.close();
     }
 }

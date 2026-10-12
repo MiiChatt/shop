@@ -24,7 +24,10 @@ class Customer {
     public void addMoney(double amount) {
         this.money += amount;
     }
-     public boolean buy(Manga manga) {
+    public ArrayList<Manga> getInventory() {
+        return inventory;
+    }
+    public boolean buy(Manga manga) {
         if (money >= manga.getPrice()) {
             money -= manga.getPrice();
             inventory.add(manga);
@@ -43,4 +46,4 @@ class Customer {
             }
         }
      }
-    }
+    }    
