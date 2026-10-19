@@ -1,4 +1,4 @@
-class Coin {
+public class Coin {
 
     private String result;
 

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-class Customer {
+public class Customer {
     private double money;
     private ArrayList<Manga> inventory;
     private double bet;

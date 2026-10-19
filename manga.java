@@ -1,4 +1,4 @@
-class Manga {
+public class Manga {
 
     private String title;
     private double price;
